@@ -1,0 +1,82 @@
+{
+	"urlPrefix": "http://localhost:8088/",
+	"mockResources": [
+		{
+			"endpoint": "/getentity",
+			"allowedMethods": ["GET"],
+			"responses": [
+				{
+					"method": "GET",
+					"statusCode": 200,
+					"contentSource": "inline",
+					"content": "{\"response\": \"some text\"}"
+				}
+			]
+		},
+		{
+			"endpoint": "/getfilecontent",
+			"allowedMethods": ["GET"],
+			"responses": [
+				{
+					"method": "GET",
+					"statusCode": 200,
+					"contentSource": "file",
+					"filePath": "C:\\NAV\\repos\\mockaccino\\mock_config\\shopify_orders.json"
+				}
+			]
+		},
+		{
+			"endpoint": "/servererror",
+			"allowedMethods": ["GET"],
+			"responses": [
+				{
+					"method": "GET",
+					"statusCode": 500,
+					"contentSource": "inline",
+					"content": "{\"error\": \"Division by zero\"}"
+				}
+			]
+		},
+		{
+			"endpoint": "/createentity",
+			"allowedMethods": ["POST"],
+			"responses": [
+				{
+					"method": "POST",
+					"statusCode": 429,
+					"contentSource": "inline",
+					"content": "{\"error\": \"Too many requests. Retry in 3 seconds.\"}"
+				},
+				{
+					"method": "POST",
+					"statusCode": 201,
+					"contentSource": "inline",
+					"content": "{\"success\": \"Created\"}"
+				}
+			]
+		},
+		{
+			"endpoint": "/getorcreate",
+			"allowedMethods": ["GET", "POST"],
+			"responses": [
+				{
+					"method": "GET",
+					"statusCode": 404,
+					"contentSource": "inline",
+					"content": "{\"error\": \"not found\"}"
+				},
+				{
+					"method": "POST",
+					"statusCode": 422,
+					"contentSource": "inline",
+					"content": "{\"error\": \"unprocessable entity\"}"
+				},
+				{
+					"method": "POST",
+					"statusCode": 201,
+					"contentSource": "none"
+				}
+			]
+		}
+	]
+}

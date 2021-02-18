@@ -1,0 +1,30 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	
+	"definitions": {
+		"mockaccinoConfig": {
+			"type": "object",
+			"properties": {
+				"urlPrefix": { "type": "string" }
+				"mockResources": {
+					"type": "array",
+					"items": { "$ref": "#/definitions/mockResource" }
+				}
+			},
+			"required": ["url_prefix", "resource_ids"]
+		},
+		
+		"mockResource": {
+			"type": "object",
+			"properties": {
+				"endpoint": { "type": "string" },
+				"allowed_methods": anyOf { "$ref": "#/definitions/http_methods" }
+			},
+			"required": ["endpoint", "allowed_methods"]
+		},
+		
+		"httpMethods": {
+			"type": { "enum": [ "GET", "POST", "PUT" ] }
+		}
+	}
+}
