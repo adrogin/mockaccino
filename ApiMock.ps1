@@ -1,5 +1,19 @@
 ﻿[string]$rootFolder = Get-Location
 
+function Get-BaseUriFromRequest {
+    Param(
+        [Parameter(Mandatory=$true)]
+        [string]$requestString
+    )
+
+    $index = $requestString.IndexOf('?')
+    if ($index -gt 0) {
+        return $requestString.Substring(0, $index)
+    }
+
+    return $requestString
+}
+
 function Get-MockContentFilePath {
     Param(
         [Parameter(Mandatory=$true)]
@@ -29,7 +43,7 @@ function Get-MockResponse {
     return $mockResource."responses$method"[$index]
 }
 
-function Init-MockConfig
+function Initialize-MockConfig
 {
     Param(
         [Parameter(Mandatory=$true)]
@@ -123,7 +137,7 @@ function Process-HttpRequest {
     )
 
     $resource = Select-Resource $mockConfig $context.Request.RawUrl
-    if ($resource -eq $null) {
+    if ($null -eq $resource) {
         Set-NotFoundResponse $context
     }
     elseif (IsMethodAllowedForResource $resource $context.Request.HttpMethod) {
@@ -184,9 +198,10 @@ function Select-Resource {
         [string]$requestUri
     )
 
+    $baseUri = Get-BaseUriFromRequest $requestUri
     foreach($resource in $mockConfig.mockResources)
     {
-        if ($resource.rawUri -eq $requestUri) {
+        if ($resource.endpoint -eq $baseUri) {
             return $resource
         }
     }
@@ -202,7 +217,7 @@ function Start-HttpListener {
         [string]$mockRootFolder
     )
 
-    $mockConfig = Init-MockConfig $configFile
+    $mockConfig = Initialize-MockConfig $configFile
     if ($mockRootFolder -ne '') {
         $rootFolder = $mockRootFolder
     }
