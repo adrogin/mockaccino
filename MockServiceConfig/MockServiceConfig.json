@@ -14,14 +14,20 @@
 			]
 		},
 		{
-			"endpoint": "/getfilecontent",
+			"endpoint": "/getentityafterretry",
 			"allowedMethods": ["GET"],
 			"responses": [
 				{
 					"method": "GET",
+					"statusCode": 429,
+					"contentSource": "inline",
+					"content": "{\"error\": \"Too many requests. Wait for 1 second before resending the request.\"}"
+				},
+				{
+					"method": "GET",
 					"statusCode": 200,
-					"contentSource": "file",
-					"filePath": "C:\\NAV\\repos\\mockaccino\\mock_config\\shopify_orders.json"
+					"contentSource": "inline",
+					"content": "{\"response\": \"success\"}"
 				}
 			]
 		},
@@ -38,7 +44,7 @@
 			]
 		},
 		{
-			"endpoint": "/createentity",
+			"endpoint": "/createentityafterretry",
 			"allowedMethods": ["POST"],
 			"responses": [
 				{
@@ -75,6 +81,18 @@
 					"method": "POST",
 					"statusCode": 201,
 					"contentSource": "none"
+				}
+			]
+		},
+		{
+			"endpoint": "/order",
+			"allowedMethods": ["GET"],
+			"responses": [
+				{
+					"method": "GET",
+					"statusCode": 200,
+					"contentSource": "file",
+					"filePath": "MockServiceConfig\\MockResponse.json"
 				}
 			]
 		}
